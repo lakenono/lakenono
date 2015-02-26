@@ -1,6 +1,5 @@
 package lakenono.db;
 
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -57,7 +56,7 @@ public final class DB
 	{
 		// 加载配置文件
 		Properties p = new Properties();
-//		p.load(new FileInputStream(this.getClass().getClassLoader().getResource("dev.properties").getPath()));
+		//		p.load(new FileInputStream(this.getClass().getClassLoader().getResource("dev.properties").getPath()));
 		p.load(new FileInputStream(this.getClass().getClassLoader().getResource("aliyun.properties").getPath()));
 
 		// 构造queryRunner
