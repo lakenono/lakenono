@@ -4,10 +4,10 @@
 	<groupId>lakenono</groupId>
 	<artifactId>lakenono</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging> 
-	<name>lakenono</name>  
+	<packaging>jar</packaging>
+	<name>lakenono</name>
 
-	<dependencies> 
+	<dependencies>
 
 		<!-- base -->
 		<dependency>
@@ -50,10 +50,29 @@
 			<version>1.4</version>
 		</dependency>
 
+		<!-- jsoup -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+
+		<!-- selenium -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-server</artifactId>
+			<version>2.44.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.44.0</version>
+		</dependency>
 
 	</dependencies>
 
-  
+
 	<build>
 		<plugins>
 			<plugin>
@@ -66,5 +85,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>
