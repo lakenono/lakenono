@@ -18,7 +18,7 @@ public class JsoupFetch
 		log.debug("fetch - {}", url);
 
 		for (int i = 1; i <= retry; i++)
-		{
+		{ 
 			try
 			{
 				return this.connect(url);
