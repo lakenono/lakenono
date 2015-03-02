@@ -11,14 +11,14 @@ public class JsoupFetch
 {
 	private final Logger log = LoggerFactory.getLogger(JsoupFetch.class);
 
-	private final int retry = 3;
+	private final int retry = 50;
 
 	public String fetch(String url) throws IOException, InterruptedException
 	{
 		log.debug("fetch - {}", url);
 
 		for (int i = 1; i <= retry; i++)
-		{ 
+		{
 			try
 			{
 				return this.connect(url);
@@ -33,7 +33,11 @@ public class JsoupFetch
 				log.error("SocketTimeoutException [1]秒后重试第[{}]次..", i);
 				Thread.sleep(1000);
 			}
-
+			catch (java.net.SocketException e)
+			{
+				log.error("java.net.SocketException [1]秒后重试第[{}]次..", i);
+				Thread.sleep(1000);
+			}
 		}
 
 		throw new RuntimeException("JsoupFetch重试[" + retry + "]次后无法成功.");
