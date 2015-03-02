@@ -15,6 +15,8 @@ public abstract class BaseBean
 {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+	// TODO 反射版本的tostring
+
 	public void persist() throws IllegalArgumentException, IllegalAccessException, SQLException, InstantiationException
 	{
 		StringBuilder sql = new StringBuilder();
@@ -57,7 +59,6 @@ public abstract class BaseBean
 
 	public void buildTable() throws SQLException
 	{
-
 		StringBuilder sql = new StringBuilder();
 
 		String tablename = this.getClass().getAnnotation(DBTable.class).name();
@@ -82,7 +83,7 @@ public abstract class BaseBean
 			}
 			else
 			{
-				sql.append("`" + field.getName() + "` ").append("varchar(255) NULL");
+				sql.append("`" + field.getName() + "` ").append("varchar(1000) NULL");
 			}
 
 			sql.append(", ");
