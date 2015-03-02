@@ -17,6 +17,8 @@ public abstract class BaseBean
 
 	// TODO 反射版本的tostring
 
+	// TODO varchar增加长度功能
+
 	public void persist() throws IllegalArgumentException, IllegalAccessException, SQLException, InstantiationException
 	{
 		StringBuilder sql = new StringBuilder();
