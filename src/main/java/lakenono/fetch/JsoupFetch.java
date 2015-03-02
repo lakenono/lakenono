@@ -38,6 +38,11 @@ public class JsoupFetch
 				log.error("java.net.SocketException [1]秒后重试第[{}]次..", i);
 				Thread.sleep(1000);
 			}
+			catch (java.io.EOFException e)
+			{
+				log.error("java.io.EOFException [1]秒后重试第[{}]次..", i);
+				Thread.sleep(1000);
+			}
 		}
 
 		throw new RuntimeException("JsoupFetch重试[" + retry + "]次后无法成功.");
