@@ -61,9 +61,15 @@ public abstract class BaseBean
 
 	public void buildTable() throws SQLException
 	{
-		StringBuilder sql = new StringBuilder();
-
 		String tablename = this.getClass().getAnnotation(DBTable.class).name();
+
+		// drop table
+		String dropSql = "DROP TABLE IF EXISTS " + tablename;
+		this.log.info(dropSql);
+		GlobalComponents.db.getRunner().update(dropSql);
+
+		// create table
+		StringBuilder sql = new StringBuilder();
 		sql.append("CREATE TABLE `" + tablename + "` (");
 
 		Field[] fields = this.getClass().getDeclaredFields();
