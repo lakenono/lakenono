@@ -19,6 +19,11 @@ public abstract class BaseBean
 
 	// TODO varchar增加长度功能
 
+	public static String getTableName(Class<?> c)
+	{
+		return c.getAnnotation(DBTable.class).name();
+	}
+
 	public void persist() throws IllegalArgumentException, IllegalAccessException, SQLException, InstantiationException
 	{
 		StringBuilder sql = new StringBuilder();
