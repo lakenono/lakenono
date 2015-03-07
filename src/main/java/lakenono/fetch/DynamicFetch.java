@@ -40,13 +40,15 @@ public class DynamicFetch
 
 	public void initTimeout()
 	{
-		this.driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
-		this.driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
-		this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		this.driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
+		this.driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+		this.driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 	}
 
 	public String fetch(String url) throws Exception
 	{
+		this.log.info("DynamicFetch fetch url:{}", url);
+
 		for (int i = 1; i <= retry; i++)
 		{
 			if (!isInit)
