@@ -91,7 +91,7 @@ public abstract class BaseBean
 			}
 			else
 			{
-				sql.append("`" + field.getName() + "` ").append("varchar(1000) NULL");
+				sql.append("`" + field.getName() + "` ").append("varchar(200) NULL");
 			}
 
 			sql.append(", ");
