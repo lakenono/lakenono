@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class BaseBean
 {
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	// TODO 反射版本的tostring
 
