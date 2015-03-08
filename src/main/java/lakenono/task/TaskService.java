@@ -5,8 +5,9 @@ import java.sql.SQLException;
 import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.db.DB;
+import lakenono.log.BaseLog;
 
-public class TaskService
+public class TaskService extends BaseLog
 {
 	public void success(String taskname) throws IllegalArgumentException, IllegalAccessException, InstantiationException, SQLException
 	{
@@ -14,9 +15,11 @@ public class TaskService
 		bean.setTaskname(taskname);
 		bean.setTaskstatus("success");
 		bean.persist();
+
+		this.log.info(bean.toString());
 	}
 
-	public boolean taskIsCompleted(String taskname) throws SQLException
+	public boolean isCompleted(String taskname) throws SQLException
 	{
 		@SuppressWarnings("unchecked")
 		long count = (long) GlobalComponents.db.getRunner().query("select count(*) from " + BaseBean.getTableName(TaskBean.class) + " where taskname=?", DB.scaleHandler, taskname);
