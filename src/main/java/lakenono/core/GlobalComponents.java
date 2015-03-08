@@ -1,5 +1,6 @@
 package lakenono.core;
 
+import redis.clients.jedis.Jedis;
 import lakenono.db.DB;
 import lakenono.fetch.DynamicFetch;
 import lakenono.fetch.JsoupFetch;
@@ -19,5 +20,7 @@ public class GlobalComponents
 	public static DynamicFetch dynamicFetch = new DynamicFetch();
 
 	public static TaskService taskService = new TaskService();
+
+	public static Jedis jedis = new Jedis("121.42.145.185", 8080);
 
 }
