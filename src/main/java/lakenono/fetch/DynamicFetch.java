@@ -2,6 +2,8 @@ package lakenono.fetch;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
@@ -43,6 +45,12 @@ public class DynamicFetch
 		this.driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
 		this.driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
 		this.driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+	}
+
+	public Document document(String url) throws Exception
+	{
+		String html = this.fetch(url);
+		return Jsoup.parse(html);
 	}
 
 	public String fetch(String url) throws Exception
