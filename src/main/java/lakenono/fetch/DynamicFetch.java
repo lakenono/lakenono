@@ -27,7 +27,7 @@ public class DynamicFetch
 		this.driver = new FirefoxDriver();
 
 		// 设置页面为最大
-		this.driver.manage().window().maximize();
+		// this.driver.manage().window().maximize();
 
 		// init cookie
 		try
