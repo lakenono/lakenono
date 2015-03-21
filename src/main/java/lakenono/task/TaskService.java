@@ -35,7 +35,7 @@ public class TaskService extends BaseLog
 		bean.setTaskstatus("success");
 		bean.persist();
 
-		this.log.info(bean.toString());
+		this.log.info("task {} success", taskname);
 	}
 
 	public boolean isCompleted(String taskname) throws SQLException
