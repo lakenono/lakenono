@@ -45,10 +45,12 @@ public class TaskService extends BaseLog
 
 		if (count > 0)
 		{
+			this.log.info("task {} is completed..", taskname);
 			return true;
 		}
 		else
 		{
+			this.log.info("task {} is not completed..", taskname);
 			return false;
 		}
 	}
