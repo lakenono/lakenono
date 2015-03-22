@@ -3,6 +3,11 @@ package lakenono.fetch.adv.utils;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
+import org.openqa.jetty.util.MultiMap;
+import org.openqa.jetty.util.UrlEncoded;
+
+
 public class HttpURLUtils {
 	/**
 	 * url 追加参数
@@ -32,5 +37,15 @@ public class HttpURLUtils {
 		}
 		urlBuilder.insert(0, url);
 		return urlBuilder.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, String> getUrlParams(String url, String charset) {
+		MultiMap values = new MultiMap();
+		if (StringUtils.isNotBlank(url)) {
+			String params = StringUtils.substringAfterLast(url, "?");
+			UrlEncoded.decodeTo(params, values, charset);
+		}
+		return values;
 	}
 }
