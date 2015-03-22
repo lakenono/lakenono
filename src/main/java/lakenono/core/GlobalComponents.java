@@ -21,6 +21,6 @@ public class GlobalComponents
 
 	public static TaskService taskService = new TaskService();
 
-	public static Jedis jedis = new Jedis("121.42.145.185", 8080);
+	public static Jedis jedis = new Jedis("115.29.110.62", 8080);
 
 }
