@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import lakenono.db.BaseBean;
 import lakenono.db.annotation.DBTable;
 
-@DBTable(name = "lakenono_task")
+@DBTable(name = "lakenono_base_task")
 public class TaskBean extends BaseBean
 {
 	public static void main(String[] args) throws SQLException
