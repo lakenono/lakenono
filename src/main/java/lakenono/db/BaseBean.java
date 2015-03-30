@@ -112,8 +112,9 @@ public class BaseBean {
 		sql.deleteCharAt(sql.length() - 1);
 		sql.append(");");
 
-		this.log.info(sql.toString());
+		this.log.debug(sql.toString());
 
+		log.info("{} persist .",this);
 		GlobalComponents.db.getRunner().update(sql.toString(), params.toArray());
 	}
 
@@ -158,8 +159,8 @@ public class BaseBean {
 		sql.delete(sql.length() - 2, sql.length());
 		sql.append(");");
 
-		this.log.info(sql.toString());
-
+		log.debug(sql.toString());
+		
 		GlobalComponents.db.getRunner().update(sql.toString());
 	}
 }
