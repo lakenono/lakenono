@@ -37,7 +37,7 @@ public abstract class FetchTaskHandler {
 					continue;
 				}
 				try {
-					if (!task.hasFinish()) {
+					if (!task.hasCompleted()) {
 						handleTask(task);
 						task.updateSuccess();
 					} else {

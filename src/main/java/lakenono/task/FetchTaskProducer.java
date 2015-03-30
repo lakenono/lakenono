@@ -25,7 +25,7 @@ public class FetchTaskProducer {
 	public void saveAndPushTask(FetchTask task) throws IllegalArgumentException, IllegalAccessException, InstantiationException, SQLException {
 		// 持久化任务——用于跟踪任务整体情况
 		task.persistOnNotExist();
-		if (task != null && !task.hasFinish()) {
+		if (task != null && !task.hasCompleted()) {
 			// 推送任务
 			pushTask(task);
 		}
