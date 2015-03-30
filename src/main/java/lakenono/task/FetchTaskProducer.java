@@ -1,11 +1,12 @@
 package lakenono.task;
 
 import java.sql.SQLException;
-
-import org.apache.commons.lang3.StringUtils;
+import java.util.List;
 
 import lakenono.core.GlobalComponents;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 
@@ -22,9 +23,9 @@ public class FetchTaskProducer {
 
 	// 处理任务
 	public void saveAndPushTask(FetchTask task) throws IllegalArgumentException, IllegalAccessException, InstantiationException, SQLException {
-		if (task != null && !task.isFinish()) {
-			// 持久化任务——用于跟踪任务整体情况
-			task.persist();
+		// 持久化任务——用于跟踪任务整体情况
+		task.persistOnNotExist();
+		if (task != null && !task.hasFinish()) {
 			// 推送任务
 			pushTask(task);
 		}
@@ -36,9 +37,7 @@ public class FetchTaskProducer {
 	 * @param task
 	 */
 	public void pushTask(FetchTask task) {
-		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++");
 		GlobalComponents.jedis.lpush(taskQueueName, JSON.toJSONString(task));
-		System.out.println("8888888888888888888888888888888888888888888888888");
 		log.info("{} push mq !", task);
 	}
 
@@ -48,5 +47,12 @@ public class FetchTaskProducer {
 	public void cleanAllTask() {
 		GlobalComponents.jedis.del(taskQueueName);
 		log.info("【{}】 queue clean all tasks !", taskQueueName);
+	}
+	
+	public  void rePushTask(String keyword) throws SQLException {
+		List<FetchTask> tasks = FetchTask.getTodoTasks(keyword, taskQueueName);
+		for (FetchTask task : tasks) {
+			pushTask(task);
+		}
 	}
 }

@@ -33,10 +33,11 @@ public abstract class FetchTaskHandler {
 				task = getTask();
 				if (task == null) {
 					Thread.sleep(waitForNextTask);
+					log.debug("wait for task ...");
 					continue;
 				}
 				try {
-					if (!task.isFinish()) {
+					if (!task.hasFinish()) {
 						handleTask(task);
 						task.updateSuccess();
 					} else {

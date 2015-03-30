@@ -74,7 +74,7 @@ public class FetchTask extends BaseBean {
 	 * @return
 	 * @throws SQLException
 	 */
-	public boolean isFinish() throws SQLException {
+	public boolean hasFinish() throws SQLException {
 		@SuppressWarnings("unchecked")
 		long count = (long) GlobalComponents.db.getRunner().query("select count(*) from " + BaseBean.getTableName(FetchTask.class) + " where name=? and url=? and batchName=? and status!=? ", DB.scaleHandler, this.name, this.url, this.batchName, STATUS_TODO);
 		if (count > 0) {
