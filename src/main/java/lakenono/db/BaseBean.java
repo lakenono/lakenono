@@ -1,6 +1,7 @@
 package lakenono.db;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +11,11 @@ import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class BaseBean {
+public class BaseBean {
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	// TODO 反射版本的tostring
@@ -24,9 +26,9 @@ public abstract class BaseBean {
 		return c.getAnnotation(DBTable.class).name();
 	}
 
-	public boolean exist(String ... fieldName) {
-		return false;
-	}
+//	public boolean exist(String ... fieldName) {
+//		return false;
+//	}
 
 	/**
 	 * 主键修饰的域存在查询持久化
@@ -87,6 +89,14 @@ public abstract class BaseBean {
 			if (field.getAnnotation(DBField.class) != null && !field.getAnnotation(DBField.class).serialization()) {
 				continue;
 			}
+			
+			// 排除静态变量
+			int mo = field.getModifiers();
+	        String priv = Modifier.toString(mo);
+	        if(StringUtils.contains(priv, "static")){
+	        	continue;
+	        }
+	        
 			sql.append("`" + field.getName() + "`");
 			sql.append(",");
 
@@ -129,6 +139,13 @@ public abstract class BaseBean {
 			if (field.getAnnotation(DBField.class) != null && !field.getAnnotation(DBField.class).serialization()) {
 				continue;
 			}
+			
+			// 排除静态变量
+			int mo = field.getModifiers();
+	        String priv = Modifier.toString(mo);
+	        if(StringUtils.contains(priv, "static")){
+	        	continue;
+	        }
 
 			if (field.getAnnotation(DBField.class) != null && !field.getAnnotation(DBField.class).type().equals("varchar")) {
 				sql.append("`" + field.getName() + "` ").append(field.getAnnotation(DBField.class).type() + " NULL");
