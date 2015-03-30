@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.nodes.Document;
 
 import com.alibaba.fastjson.JSON;
 
@@ -34,6 +33,7 @@ public abstract class FetchTaskHandler {
 				task = getTask();
 				if (task == null) {
 					Thread.sleep(waitForNextTask);
+					continue;
 				}
 				try {
 					if (!task.isFinish()) {
