@@ -40,6 +40,7 @@ public abstract class FetchTaskHandler {
 					if (!task.hasCompleted()) {
 						handleTask(task);
 						task.updateSuccess();
+						Thread.sleep(sleep);
 					} else {
 						log.info("{} has bean finish!", task);
 					}

@@ -24,11 +24,14 @@ public class FetchTaskProducer {
 	// 处理任务
 	public void saveAndPushTask(FetchTask task) throws IllegalArgumentException, IllegalAccessException, InstantiationException, SQLException {
 		// 持久化任务——用于跟踪任务整体情况
-		task.persistOnNotExist();
-		if (task != null && !task.hasCompleted()) {
-			// 推送任务
-			pushTask(task);
+		if (task != null) {
+			task.persistOnNotExist();
+			if (!task.hasCompleted()) {
+				// 推送任务
+				pushTask(task);
+			}
 		}
+
 	}
 
 	/**
@@ -48,8 +51,8 @@ public class FetchTaskProducer {
 		GlobalComponents.jedis.del(taskQueueName);
 		log.info("【{}】 queue clean all tasks !", taskQueueName);
 	}
-	
-	public  void rePushTask(String keyword) throws SQLException {
+
+	public void rePushTask(String keyword) throws SQLException {
 		List<FetchTask> tasks = FetchTask.getTodoTasks(keyword, taskQueueName);
 		for (FetchTask task : tasks) {
 			pushTask(task);

@@ -23,17 +23,17 @@ public class FetchTask extends BaseBean {
 
 	// 总任务名
 	@DBConstraintPK
-	private String name;
+	protected String name;
 	// 爬取地址
 	@DBConstraintPK
-	private String url;
+	protected String url;
 	// 批次人物名
 	@DBConstraintPK
-	private String batchName;
+	protected String batchName;
 
-	private String status = STATUS_TODO;
+	protected String status = STATUS_TODO;
 	// 提供给爬虫节点的附加信息
-	private String extra;
+	protected String extra;
 
 	public void updateSuccess() throws SQLException {
 		updateStatus(STATUS_SUCCESS);
