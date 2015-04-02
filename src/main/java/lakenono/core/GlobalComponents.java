@@ -1,10 +1,10 @@
 package lakenono.core;
 
-import redis.clients.jedis.Jedis;
 import lakenono.db.DB;
 import lakenono.fetch.DynamicFetch;
 import lakenono.fetch.JsoupFetch;
 import lakenono.task.TaskService;
+import redis.clients.jedis.Jedis;
 
 /**
  * @author hu.xinlei

@@ -10,7 +10,7 @@ public interface PageFetchHandler
 
 	void process(int i) throws Exception;
 
-	public int getMaxPage() throws UnsupportedEncodingException, IOException, InterruptedException;
+	public int getMaxPage() throws UnsupportedEncodingException, IOException, InterruptedException, Exception;
 
 	public String buildUrl(int pageNum) throws UnsupportedEncodingException;
 
