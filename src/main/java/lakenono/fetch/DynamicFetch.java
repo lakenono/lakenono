@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,20 +25,21 @@ public class DynamicFetch
 	{
 		this.log.debug("init web driver...");
 
-		this.driver = new FirefoxDriver();
-
 		// 设置页面为最大
 		// this.driver.manage().window().maximize();
 
-		// init cookie
-		try
-		{
-			this.log.debug("init cookies");
-		}
-		catch (Exception e)
-		{
-			this.log.error("init error", e);
-		}
+		FirefoxProfile firefoxProfile = new FirefoxProfile();
+		// 去掉css
+		firefoxProfile.setPreference("permissions.default.stylesheet", 2);
+		this.log.debug("init web driver... 去掉css");
+		// 去掉图片
+		firefoxProfile.setPreference("permissions.default.image", 2);
+		this.log.debug("init web driver... 去掉图片");
+		// 去掉flash
+		firefoxProfile.setPreference("dom.ipc.plugins.enabled.libflashplayer.so", false);
+		this.log.debug("init web driver... 去掉flash");
+
+		this.driver = new FirefoxDriver(firefoxProfile);
 	}
 
 	public void initTimeout()
