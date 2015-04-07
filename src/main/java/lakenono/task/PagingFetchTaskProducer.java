@@ -24,7 +24,7 @@ public abstract class PagingFetchTaskProducer extends FetchTaskProducer {
 	public void run() {
 		log.info("FetchTask Producer start ...");
 
-		super.cleanAllTask();
+//		super.cleanAllTask();
 
 		int pages = getMaxPage();
 

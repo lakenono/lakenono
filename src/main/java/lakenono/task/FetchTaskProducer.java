@@ -25,9 +25,15 @@ public class FetchTaskProducer {
 	public void saveAndPushTask(FetchTask task) throws IllegalArgumentException, IllegalAccessException, InstantiationException, SQLException {
 		// 持久化任务——用于跟踪任务整体情况
 		if (task != null) {
-			task.persistOnNotExist();
-			if (!task.hasCompleted()) {
-				// 推送任务
+//			task.persistOnNotExist();
+//			//TODO 数据库中Todo类型的任务会重新推送，对于还没有执行完的任务，在周期完成时会重新推送。
+//			if (!task.hasCompleted()) {
+//				// 推送任务
+//				pushTask(task);
+//			}
+			
+			boolean isNotPush = task.persistOnNotExist();
+			if(isNotPush){
 				pushTask(task);
 			}
 		}
@@ -47,7 +53,7 @@ public class FetchTaskProducer {
 	/**
 	 * 清空任务队列
 	 */
-	public void cleanAllTask() {
+	public static  void cleanAllTask(String taskQueueName) {
 		GlobalComponents.jedis.del(taskQueueName);
 		log.info("【{}】 queue clean all tasks !", taskQueueName);
 	}

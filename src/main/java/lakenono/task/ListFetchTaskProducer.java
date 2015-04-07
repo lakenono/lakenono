@@ -9,16 +9,18 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class ListFetchTaskProducer<A> extends FetchTaskProducer {
 	@Setter
 	protected long waitTaskTime = 30 * 60 * 1000;
+	
+	@Setter
+	protected long batchSleep = 15 * 60 *1000;
 
 	public ListFetchTaskProducer(String taskQueueName) {
 		super(taskQueueName);
 	}
 
 	public void run() throws Exception {
-		cleanAllTask();
-
 		while (true) {
 			try {
+				//TODO 当消费者处理速度赶不上生产者推送速度，二次循环容易产生堆积
 				List<A> tasks = getTaskArgs();
 
 				if (tasks == null || tasks.isEmpty()) {
@@ -35,6 +37,8 @@ public abstract class ListFetchTaskProducer<A> extends FetchTaskProducer {
 						log.error("{}|{} push error : ", a, e);
 					}
 				}
+				
+				Thread.sleep(batchSleep);
 			} catch (Exception e) {
 				log.error("Get task args error! ",e);
 			}

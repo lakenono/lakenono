@@ -66,7 +66,7 @@ public abstract class FetchTaskHandler {
 	protected abstract void handleTask(FetchTask task) throws Exception;
 
 	private FetchTask getTask() {
-		String json = GlobalComponents.jedis.lpop(taskQueueName);
+		String json = GlobalComponents.jedis.rpop(taskQueueName);
 
 		if (json == null) {
 			return null;
