@@ -9,6 +9,7 @@ import java.util.List;
 import lakenono.core.GlobalComponents;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
+import lakenono.db.annotation.DBIgnore;
 import lakenono.db.annotation.DBTable;
 import lakenono.log.BaseLog;
 
@@ -103,6 +104,12 @@ public class BaseBean extends BaseLog
 		{
 			// 设置private访问权限
 			field.setAccessible(true);
+			
+			//忽略字段
+			if (field.getAnnotation(DBIgnore.class) != null )
+			{
+				continue;
+			}
 
 			// 排除掉非序列化字段
 			if (field.getAnnotation(DBField.class) != null && !field.getAnnotation(DBField.class).serialization())
@@ -159,6 +166,12 @@ public class BaseBean extends BaseLog
 		{
 			// 设置private访问权限
 			field.setAccessible(true);
+			
+			//忽略字段
+			if (field.getAnnotation(DBIgnore.class) != null )
+			{
+				continue;
+			}
 
 			// 排除掉非序列化字段
 			if (field.getAnnotation(DBField.class) != null && !field.getAnnotation(DBField.class).serialization())
