@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSON;
 
 public class BaseBean extends BaseLog {
-	
+
 	public static String getTableName(Class<?> c) {
 		return c.getAnnotation(DBTable.class).name();
 	}
@@ -222,5 +222,11 @@ public class BaseBean extends BaseLog {
 		log.debug(sql.toString());
 
 		GlobalComponents.db.getRunner().update(sql.toString());
+	}
+
+	public static class UUID {
+		public static String generateId() {
+			return java.util.UUID.randomUUID().toString();
+		}
 	}
 }
