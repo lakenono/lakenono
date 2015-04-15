@@ -33,6 +33,8 @@ public abstract class PagingFetchTaskProducer extends FetchTaskProducer {
 			log.error("Get max page fail ! ");
 			return;
 		}
+		
+		log.info("Get max page : " + pages);
 
 		// 迭代
 		for (int i = 1; i <= pages; i++) {

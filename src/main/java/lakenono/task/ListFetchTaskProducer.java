@@ -24,8 +24,8 @@ public abstract class ListFetchTaskProducer<A> extends FetchTaskProducer {
 				List<A> tasks = getTaskArgs();
 
 				if (tasks == null || tasks.isEmpty()) {
-					Thread.sleep(waitTaskTime);
 					log.debug("wait for push task");
+					Thread.sleep(waitTaskTime);
 					continue;
 				}
 
@@ -39,6 +39,7 @@ public abstract class ListFetchTaskProducer<A> extends FetchTaskProducer {
 				}
 				
 				//休息一段时间，等待客户端处理
+				log.debug("wait for client handler");
 				Thread.sleep(batchSleep);
 			} catch (Exception e) {
 				log.error("Get task args error! ",e);

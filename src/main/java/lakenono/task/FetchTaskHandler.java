@@ -32,8 +32,8 @@ public abstract class FetchTaskHandler {
 			try {
 				task = getTask();
 				if (task == null) {
-					Thread.sleep(waitForNextTask);
 					log.debug("wait for task ...");
+					Thread.sleep(waitForNextTask);
 					continue;
 				}
 				try {

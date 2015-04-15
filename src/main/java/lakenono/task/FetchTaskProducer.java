@@ -25,19 +25,19 @@ public class FetchTaskProducer {
 	public void saveAndPushTask(FetchTask task) throws IllegalArgumentException, IllegalAccessException, InstantiationException, SQLException {
 		// 持久化任务——用于跟踪任务整体情况
 		if (task != null) {
-//			task.persistOnNotExist();
-//			//TODO 数据库中Todo类型的任务会重新推送，对于还没有执行完的任务，在周期完成时会重新推送。
-//			if (!task.hasCompleted()) {
-//				// 推送任务
-//				pushTask(task);
-//			}
-			
+			// task.persistOnNotExist();
+			// //TODO 数据库中Todo类型的任务会重新推送，对于还没有执行完的任务，在周期完成时会重新推送。
+			// if (!task.hasCompleted()) {
+			// // 推送任务
+			// pushTask(task);
+			// }
+
 			boolean isExist = task.exist();
-			if(!isExist){
-				//推送
+			if (!isExist) {
+				// 推送
 				pushTask(task);
-				
-				//记录推送日志
+
+				// 记录推送日志
 				task.persist();
 			}
 		}
@@ -57,9 +57,16 @@ public class FetchTaskProducer {
 	/**
 	 * 清空任务队列
 	 */
-	public static  void cleanAllTask(String taskQueueName) {
+	public static void cleanAllTask(String taskQueueName) {
+		log.info("【{}】 queue clean tasks start !", taskQueueName);
 		GlobalComponents.jedis.del(taskQueueName);
-		log.info("【{}】 queue clean all tasks !", taskQueueName);
+		log.info("【{}】 queue clean task finish!", taskQueueName);
+	}
+
+	public static void cleanAllTaskLog(String name, String batchName) throws SQLException {
+		log.info("【{},{}】 clean task log start !", name, batchName);
+		int delCount = FetchTask.cleanAllTask(name, batchName);
+		log.info("【{},{}】  clean task log finish ! del : {}", name, batchName,delCount);
 	}
 
 	public void rePushTask(String keyword) throws SQLException {

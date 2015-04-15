@@ -89,8 +89,33 @@ public class FetchTask extends BaseBean {
 			return false;
 		}
 	}
+	
+	/**
+	 * 删除任务队里
+	 * 
+	 * @param name
+	 * @param batchName
+	 * @throws SQLException 
+	 */
+	public static int cleanAllTask(String name,String batchName) throws SQLException{
+		log.debug("delete fetch task name={},batch={}",name,batchName);
+		int delCount = GlobalComponents.db.getRunner().update("DELETE FROM " + BaseBean.getTableName(FetchTask.class) + " WHERE name=? and batchName=?",name,batchName);
+		log.debug("delete fetch task name={},batch={} finish ，delete count ：{} ",name,batchName,delCount);
+		return delCount;
+	}
 
 	public static void main(String[] args) throws Exception {
-		new FetchTask().buildTable();
+		FetchTask task = new FetchTask();
+		task.setName("testname");
+		task.setBatchName("testBatchName");
+		task.setUrl("url");
+		task.setStatus("todo");
+		task.setExtra("extra");
+		
+		task.persistOnNotExist();
+		
+		int delCount = FetchTask.cleanAllTask(task.getName(), task.getBatchName());
+		System.out.println(delCount);
+		
 	}
 }
