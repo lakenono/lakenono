@@ -38,6 +38,7 @@ public abstract class ListFetchTaskProducer<A> extends FetchTaskProducer {
 					}
 				}
 				
+				//休息一段时间，等待客户端处理
 				Thread.sleep(batchSleep);
 			} catch (Exception e) {
 				log.error("Get task args error! ",e);

@@ -9,12 +9,16 @@ import lakenono.db.DB;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 @DBTable(name = "lakenono_fetch_task")
 @Data
+@EqualsAndHashCode(callSuper=false)
+@ToString(callSuper=false)
 @Slf4j
 public class FetchTask extends BaseBean {
 	private static final String STATUS_TODO = "todo";
@@ -27,7 +31,7 @@ public class FetchTask extends BaseBean {
 	// 爬取地址
 	@DBConstraintPK
 	protected String url;
-	// 批次人物名
+	// 批次名
 	@DBConstraintPK
 	protected String batchName;
 

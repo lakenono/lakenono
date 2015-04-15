@@ -32,9 +32,13 @@ public class FetchTaskProducer {
 //				pushTask(task);
 //			}
 			
-			boolean isNotPush = task.persistOnNotExist();
-			if(isNotPush){
+			boolean isExist = task.exist();
+			if(!isExist){
+				//推送
 				pushTask(task);
+				
+				//记录推送日志
+				task.persist();
 			}
 		}
 
