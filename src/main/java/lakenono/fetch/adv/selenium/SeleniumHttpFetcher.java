@@ -95,7 +95,7 @@ public class SeleniumHttpFetcher implements HttpFetcher {
 		webDriver.get(url);
 
 		// 处理自动化行为
-		boolean doWebSuccess = false;
+		boolean doWebSuccess = true;
 		if (webAction != null) {
 			doWebSuccess = webAction.doWeb(webDriver, httpRequest, httpResponse);
 		}
