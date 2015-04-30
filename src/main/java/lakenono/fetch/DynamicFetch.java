@@ -29,15 +29,15 @@ public class DynamicFetch
 		// this.driver.manage().window().maximize();
 
 		FirefoxProfile firefoxProfile = new FirefoxProfile();
-		// 去掉css
-		firefoxProfile.setPreference("permissions.default.stylesheet", 2);
-		this.log.debug("init web driver... 去掉css");
-		// 去掉图片
-		firefoxProfile.setPreference("permissions.default.image", 2);
-		this.log.debug("init web driver... 去掉图片");
-		// 去掉flash
-		firefoxProfile.setPreference("dom.ipc.plugins.enabled.libflashplayer.so", false);
-		this.log.debug("init web driver... 去掉flash");
+//		// 去掉css
+//		firefoxProfile.setPreference("permissions.default.stylesheet", 2);
+//		this.log.debug("init web driver... 去掉css");
+//		// 去掉图片
+//		firefoxProfile.setPreference("permissions.default.image", 2);
+//		this.log.debug("init web driver... 去掉图片");
+//		// 去掉flash
+//		firefoxProfile.setPreference("dom.ipc.plugins.enabled.libflashplayer.so", false);
+//		this.log.debug("init web driver... 去掉flash");
 
 		this.driver = new FirefoxDriver(firefoxProfile);
 	}
