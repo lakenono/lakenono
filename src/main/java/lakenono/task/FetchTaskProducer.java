@@ -82,6 +82,7 @@ public class FetchTaskProducer {
 		List<FetchTask> tasks = FetchTask.getErrorTasks(name, batchName);
 
 		for (FetchTask task : tasks) {
+			task.setStatus(FetchTask.STATUS_TODO);
 			task.updateStatus(FetchTask.STATUS_TODO);
 			pushTask(task);
 		}
