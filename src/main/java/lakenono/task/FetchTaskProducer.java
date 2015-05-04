@@ -72,7 +72,9 @@ public class FetchTaskProducer {
 	public void rePushTask(String keyword) throws SQLException {
 		List<FetchTask> tasks = FetchTask.getTodoTasks(keyword, taskQueueName);
 		for (FetchTask task : tasks) {
+			log.info("repush : ", task);
 			pushTask(task);
+			
 		}
 	}
 }
