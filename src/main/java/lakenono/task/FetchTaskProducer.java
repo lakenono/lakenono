@@ -66,7 +66,7 @@ public class FetchTaskProducer {
 	public static void cleanAllTaskLog(String name, String batchName) throws SQLException {
 		log.info("【{},{}】 clean task log start !", name, batchName);
 		int delCount = FetchTask.cleanAllTask(name, batchName);
-		log.info("【{},{}】  clean task log finish ! del : {}", name, batchName,delCount);
+		log.info("【{},{}】  clean task log finish ! del : {}", name, batchName, delCount);
 	}
 
 	public void rePushTask(String keyword) throws SQLException {
@@ -74,7 +74,17 @@ public class FetchTaskProducer {
 		for (FetchTask task : tasks) {
 			log.info("repush : {} ", task);
 			pushTask(task);
-			
+
 		}
 	}
+
+	public void reStartErrorTask(String name, String batchName) throws SQLException {
+		List<FetchTask> tasks = FetchTask.getErrorTasks(name, batchName);
+
+		for (FetchTask task : tasks) {
+			task.updateStatus(FetchTask.STATUS_TODO);
+			pushTask(task);
+		}
+	}
+
 }

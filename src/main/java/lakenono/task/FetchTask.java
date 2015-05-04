@@ -17,13 +17,13 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 @DBTable(name = "lakenono_fetch_task")
 @Data
-@EqualsAndHashCode(callSuper=false)
-@ToString(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
+@ToString(callSuper = false)
 @Slf4j
 public class FetchTask extends BaseBean {
-	private static final String STATUS_TODO = "todo";
-	private static final String STATUS_SUCCESS = "success";
-	private static final String STATUS_ERROR = "error";
+	public static final String STATUS_TODO = "todo";
+	public static final String STATUS_SUCCESS = "success";
+	public static final String STATUS_ERROR = "error";
 
 	// 总任务名
 	@DBConstraintPK
@@ -48,12 +48,16 @@ public class FetchTask extends BaseBean {
 	}
 
 	private static List<FetchTask> getStatusTasks(String name, String batchName, String status) throws SQLException {
-		List<FetchTask> tasks = GlobalComponents.db.getRunner().query("select * from " + BaseBean.getTableName(FetchTask.class) + " where name=? and batchName=? and status=? ", new BeanListHandler<>(FetchTask.class), name, batchName,status);
+		List<FetchTask> tasks = GlobalComponents.db.getRunner().query("select * from " + BaseBean.getTableName(FetchTask.class) + " where name=? and batchName=? and status=? ", new BeanListHandler<>(FetchTask.class), name, batchName, status);
 		return tasks;
 	}
-	
+
 	public static List<FetchTask> getTodoTasks(String name, String batchName) throws SQLException {
-		return getStatusTasks(name,batchName,STATUS_TODO);
+		return getStatusTasks(name, batchName, STATUS_TODO);
+	}
+
+	public static List<FetchTask> getErrorTasks(String name, String batchName) throws SQLException {
+		return getStatusTasks(name, batchName, STATUS_ERROR);
 	}
 
 	/**
@@ -89,18 +93,18 @@ public class FetchTask extends BaseBean {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 删除任务队里
 	 * 
 	 * @param name
 	 * @param batchName
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
-	public static int cleanAllTask(String name,String batchName) throws SQLException{
-		log.debug("delete fetch task name={},batch={}",name,batchName);
-		int delCount = GlobalComponents.db.getRunner().update("DELETE FROM " + BaseBean.getTableName(FetchTask.class) + " WHERE name=? and batchName=?",name,batchName);
-		log.debug("delete fetch task name={},batch={} finish ，delete count ：{} ",name,batchName,delCount);
+	public static int cleanAllTask(String name, String batchName) throws SQLException {
+		log.debug("delete fetch task name={},batch={}", name, batchName);
+		int delCount = GlobalComponents.db.getRunner().update("DELETE FROM " + BaseBean.getTableName(FetchTask.class) + " WHERE name=? and batchName=?", name, batchName);
+		log.debug("delete fetch task name={},batch={} finish ，delete count ：{} ", name, batchName, delCount);
 		return delCount;
 	}
 
@@ -111,11 +115,11 @@ public class FetchTask extends BaseBean {
 		task.setUrl("url");
 		task.setStatus("todo");
 		task.setExtra("extra");
-		
+
 		task.persistOnNotExist();
-		
+
 		int delCount = FetchTask.cleanAllTask(task.getName(), task.getBatchName());
 		System.out.println(delCount);
-		
+
 	}
 }
