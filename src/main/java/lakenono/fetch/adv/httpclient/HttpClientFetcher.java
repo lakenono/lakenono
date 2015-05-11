@@ -121,8 +121,15 @@ public class HttpClientFetcher implements HttpFetcher {
 			}
 
 			// 读取数据内容
-			if (httpResponse.getStatus() == HttpStatus.SC_OK && httpRequest.isNeedContent()) {
-				httpResponse.setContent(EntityUtils.toByteArray(httClientEntity));
+			int respCode = httpResponse.getStatus();
+			if (httpRequest.isNeedContent()) {
+				if (respCode == HttpStatus.SC_OK) {
+					httpResponse.setContent(EntityUtils.toByteArray(httClientEntity));
+				}
+
+				if (respCode == HttpStatus.SC_MOVED_PERMANENTLY || respCode == HttpStatus.SC_MOVED_TEMPORARILY || respCode == HttpStatus.SC_SEE_OTHER || respCode == HttpStatus.SC_TEMPORARY_REDIRECT) {
+					httpResponse.setContent(httpClientResponse.getLastHeader("Location").getValue().getBytes());
+				}
 			}
 			// 关闭响应流
 			EntityUtils.consume(httClientEntity);
@@ -238,20 +245,16 @@ public class HttpClientFetcher implements HttpFetcher {
 		// System.out.println(new String(resp.getContent()));
 		// httpExecutor.close();
 
-		String url = "http://www.sohu.com";
+		String url = "http://cms.tanx.com/t.gif?id=34462052";
 		HttpRequest req = new HttpRequest(url);
-		req.setNeedCookies(true);
-		req.setNeedCookies(false);
+		req.setRedirectsEnabled(false);
+		req.setNeedContent(true);
 
 		HttpFetcher httpExecutor = new HttpClientFetcher();
 		HttpResponse resp = httpExecutor.run(req);
 
-		Map<String, String> cookies = resp.getCookies();
-		if (cookies != null) {
-			for (Entry<String, String> cEntry : cookies.entrySet()) {
-				System.out.println(cEntry.getKey() + " | " + cEntry.getValue());
-			}
-		}
+		System.out.println(new String(resp.getContent(), "GBK"));
+
 		httpExecutor.close();
 	}
 
