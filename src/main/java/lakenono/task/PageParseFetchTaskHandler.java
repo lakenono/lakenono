@@ -28,7 +28,7 @@ public abstract class PageParseFetchTaskHandler extends FetchTaskHandler{
 	protected void handleTask(FetchTask task) throws IOException, InterruptedException ,Exception{
 		Document doc = GlobalComponents.fetcher.document(task.getUrl());
 		parsePage(doc, task);
-		Thread.sleep(sleep);
+//		Thread.sleep(sleep);
 	}
 
 	/**
