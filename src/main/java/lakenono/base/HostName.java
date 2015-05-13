@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 
 public class HostName
 {
-	public static String getHostNameForLiunx()
+	public static String getHostName()
 	{
 		try
 		{
@@ -28,7 +28,7 @@ public class HostName
 
 	public static void main(String[] args)
 	{
-		String hostNameForLiunx = HostName.getHostNameForLiunx();
+		String hostNameForLiunx = HostName.getHostName();
 		System.out.println(hostNameForLiunx);
 	}
 }
