@@ -1,4 +1,4 @@
-package lakenono.base;
+package lakenono.util;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

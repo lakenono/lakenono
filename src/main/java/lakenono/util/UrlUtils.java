@@ -1,4 +1,4 @@
-package lakenono.base;
+package lakenono.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
