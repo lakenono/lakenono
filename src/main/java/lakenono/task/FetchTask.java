@@ -71,9 +71,9 @@ public class FetchTask extends BaseBean {
 		sql.append("UPDATE ").append(BaseBean.getTableName(FetchTask.class)).append(' ');
 		sql.append("SET status=? WHERE name=? and url=? and batchName=?");
 
-		GlobalComponents.db.getRunner().update(sql.toString(), status, this.name, this.url, this.batchName);
+		int records = GlobalComponents.db.getRunner().update(sql.toString(), status, this.name, this.url, this.batchName);
 
-		log.debug("task {} is updateStatue ..", this);
+		log.debug("task {} is updateStatue {} records ", this, records);
 	}
 
 	/**
@@ -109,17 +109,16 @@ public class FetchTask extends BaseBean {
 	}
 
 	public static void main(String[] args) throws Exception {
-		FetchTask task = new FetchTask();
-		task.setName("testname");
-		task.setBatchName("testBatchName");
-		task.setUrl("url");
-		task.setStatus("todo");
-		task.setExtra("extra");
-
-		task.persistOnNotExist();
-
-		int delCount = FetchTask.cleanAllTask(task.getName(), task.getBatchName());
-		System.out.println(delCount);
-
+		new FetchTask().buildTable();
 	}
+
+	public FetchTask clone() {
+		FetchTask newTask = new FetchTask();
+		newTask.setName(this.getName());
+		newTask.setBatchName(this.getBatchName());
+		newTask.setUrl(this.getUrl());
+		newTask.setExtra(this.getExtra());
+		return newTask;
+	}
+
 }
