@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 
 public class CollectionDemo
 {
-	/**
+	/*
 	 * Guava Multimap, 同一个key可以有多个value的Map.
 	 */
 	@Test
@@ -40,7 +40,7 @@ public class CollectionDemo
 
 	}
 
-	/**
+	/*
 	 * Guava BiMap，可随时调转Key与Value.
 	 */
 	@Test
