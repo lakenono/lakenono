@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>lakenono</groupId>
@@ -92,13 +91,14 @@
 			<version>1.2.4</version>
 		</dependency>
 
+		<!-- lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.12.6</version>
 		</dependency>
 
-
+		<!-- thrift -->
 		<dependency>
 			<groupId>org.apache.thrift</groupId>
 			<artifactId>libthrift</artifactId>
@@ -110,10 +110,41 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<!-- google guava 工具类 -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
+		</dependency>
+
+		<!-- assertj断言 -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+
+
 	</dependencies>
 
 
 	<build>
+		<!-- 默认源代码和资源文件目录配置 -->
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
