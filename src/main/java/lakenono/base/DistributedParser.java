@@ -49,4 +49,15 @@ public abstract class DistributedParser
 
 	public abstract void parse(String result, Task task) throws Exception;
 
+	protected Task buildTask(String url, String queueName, Task perTask)
+	{
+		Task task = new Task();
+		task.setProjectName(perTask.getProjectName());
+		task.setQueueName(queueName);
+		task.setUrl(url);
+		task.setExtra(perTask.getExtra());
+
+		return task;
+	}
+
 }
