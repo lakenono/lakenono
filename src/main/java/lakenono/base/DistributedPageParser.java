@@ -20,6 +20,8 @@ public abstract class DistributedPageParser
 		// 取task
 		Task task = Queue.pull(this.getQueueName());
 
+		// TODO task is null
+		
 		String result;
 
 		// 爬取
