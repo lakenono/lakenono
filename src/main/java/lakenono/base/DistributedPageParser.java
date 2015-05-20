@@ -20,20 +20,24 @@ public abstract class DistributedPageParser
 		// 取task
 		Task task = Queue.pull(this.getQueueName());
 
-		// TODO task is null
-		
+		// 空值判断
+		if (null == task)
+		{
+			return;
+		}
+
 		String result;
 
 		// 爬取
 		try
 		{
 			//TODO 静态 动态 fetch判断.. 使用抽象方法. 是否使用cookie
-
 			result = GlobalComponents.fetcher.fetch(task.getUrl());
 		}
 		catch (IOException | InterruptedException e)
 		{
 			// TODO 下载异常进行重试 推送任务到队列
+			task.updateError();
 			return;
 		}
 
@@ -69,6 +73,7 @@ public abstract class DistributedPageParser
 		catch (Exception e)
 		{
 			log.error("{}", e);
+			task.updateError();
 			return;
 		}
 

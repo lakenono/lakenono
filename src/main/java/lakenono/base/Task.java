@@ -91,6 +91,8 @@ public class Task extends BaseBean
 		new FetchTask().buildTable();
 	}
 
+	// TODO 增加重试
+
 	/**
 	 * 更新状态
 	 * 
