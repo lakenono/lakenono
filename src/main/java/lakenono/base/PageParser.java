@@ -7,8 +7,7 @@ import lombok.extern.slf4j.Slf4j;
  * 作为任务入口
  * 列表页任务生成器,定义分页处理模板，推送任务
  * 
- * @author shi.lei
- *
+ * @author lakenono
  */
 @Slf4j
 public abstract class PageParser
@@ -78,7 +77,7 @@ public abstract class PageParser
 		task.setProjectName(this.projectName);
 		task.setQueueName(this.getQueueName());
 		task.setUrl(url);
-		
+
 		return task;
 	}
 }

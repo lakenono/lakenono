@@ -7,6 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.alibaba.fastjson.JSON;
 
+/**
+ * 队列工具类 
+ * @author Lakenono
+ */
 @Slf4j
 public class Queue
 {

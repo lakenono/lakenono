@@ -5,6 +5,10 @@ import java.io.IOException;
 import lakenono.core.GlobalComponents;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 普通任务 
+ * @author Lakenono
+ */
 @Slf4j
 public abstract class DistributedParser extends BaseParser
 {

@@ -7,6 +7,10 @@ import org.junit.Test;
 import lakenono.core.GlobalComponents;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 处理带有分页的任务 
+ * @author Lakenono
+ */
 @Slf4j
 public abstract class DistributedPageParser extends BaseParser
 {

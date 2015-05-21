@@ -13,6 +13,10 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 任务实体类 
+ * @author Lakenono
+ */
 @DBTable(name = "lakenono_lolth_task")
 @Data
 @EqualsAndHashCode(callSuper = false)
