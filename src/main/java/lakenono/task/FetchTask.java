@@ -71,7 +71,7 @@ public class FetchTask extends BaseBean {
 		sql.append("UPDATE ").append(BaseBean.getTableName(FetchTask.class)).append(' ');
 		sql.append("SET status=? WHERE url=? and name=? and batchName=?");
 
-		int records = GlobalComponents.db.getRunner().update(sql.toString(), status, this.name, this.url, this.batchName);
+		int records = GlobalComponents.db.getRunner().update(sql.toString(), status, this.url, this.name,  this.batchName);
 
 		log.debug("task {} is updateStatue {} records ", this, records);
 	}
@@ -84,7 +84,7 @@ public class FetchTask extends BaseBean {
 	 */
 	public boolean hasCompleted() throws SQLException {
 		@SuppressWarnings("unchecked")
-		long count = (long) GlobalComponents.db.getRunner().query("select count(*) from " + BaseBean.getTableName(FetchTask.class) + " where url=? and name=? and batchName=? and status!=? ", DB.scaleHandler, this.name, this.url, this.batchName, STATUS_TODO);
+		long count = (long) GlobalComponents.db.getRunner().query("select count(*) from " + BaseBean.getTableName(FetchTask.class) + " where url=? and name=? and batchName=? and status!=? ", DB.scaleHandler, this.url, this.name,  this.batchName, STATUS_TODO);
 		if (count > 0) {
 			log.debug("{} is completed..", this);
 			return true;
