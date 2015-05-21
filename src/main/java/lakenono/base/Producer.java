@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author lakenono
  */
 @Slf4j
-public abstract class PageParser
+public abstract class Producer
 {
 	public static final int FIRST_PAGE = 1;
 
@@ -22,7 +22,7 @@ public abstract class PageParser
 	// 项目名称
 	public String projectName;
 
-	public PageParser(String projectName)
+	public Producer(String projectName)
 	{
 		super();
 		this.projectName = projectName;
