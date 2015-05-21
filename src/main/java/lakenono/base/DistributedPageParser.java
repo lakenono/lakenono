@@ -2,19 +2,20 @@ package lakenono.base;
 
 import java.io.IOException;
 
+import org.junit.Test;
+
 import lakenono.core.GlobalComponents;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class DistributedPageParser
+public abstract class DistributedPageParser extends BaseParser
 {
-	private String classname = this.getClass().getName();
-
 	public static final int FIRST_PAGE = 1;
 
 	// 队列名称
 	public abstract String getQueueName();
 
+	@Override
 	public void run()
 	{
 		// 取task
@@ -23,7 +24,12 @@ public abstract class DistributedPageParser
 		// 空值判断
 		if (null == task)
 		{
+			log.debug("{} task is null. sleep...", this.getClass());
 			return;
+		}
+		else
+		{
+			log.debug("task begin {}", task);
 		}
 
 		String result;
@@ -81,8 +87,6 @@ public abstract class DistributedPageParser
 		task.updateSuccess();
 	}
 
-	public abstract void parse(String result, Task task) throws Exception;
-
 	public abstract int getMaxPage(String result, Task task) throws Exception;
 
 	/**
@@ -99,13 +103,6 @@ public abstract class DistributedPageParser
 	 * @param url
 	 * @return
 	 */
-
-	// 处理url正常页面无数据 例如: "该贴以删除."
-	protected boolean errorPage(String result)
-	{
-		return false;
-	}
-
 	protected Task buildTask(String url, Task perTask)
 	{
 		Task task = new Task();

@@ -3,17 +3,18 @@ package lakenono.base;
 import java.io.IOException;
 
 import lakenono.core.GlobalComponents;
+import lombok.extern.slf4j.Slf4j;
 
-public abstract class DistributedParser
+@Slf4j
+public abstract class DistributedParser extends BaseParser
 {
-	private String classname = this.getClass().getName();
-
 	// 队列名称
 	public abstract String getQueueName();
 
 	// 项目名称
 	public String projectName;
 
+	@Override
 	public void run()
 	{
 		// 取task
@@ -22,7 +23,12 @@ public abstract class DistributedParser
 		// 空值判断
 		if (null == task)
 		{
+			log.debug("{} task is null. sleep...", this.getClass());
 			return;
+		}
+		else
+		{
+			log.debug("task begin {}", task);
 		}
 
 		String result;
@@ -35,6 +41,7 @@ public abstract class DistributedParser
 		catch (IOException | InterruptedException e)
 		{
 			// TODO 下载异常进行重试 推送任务到队列
+			log.error("", e);
 			task.updateError();
 			return;
 		}
@@ -47,6 +54,7 @@ public abstract class DistributedParser
 		catch (Exception e)
 		{
 			// TODO 解析异常直接进入error
+			log.error("", e);
 			task.updateError();
 			return;
 		}
@@ -54,8 +62,6 @@ public abstract class DistributedParser
 		// 更新任务状态
 		task.updateSuccess();
 	}
-
-	public abstract void parse(String result, Task task) throws Exception;
 
 	protected Task buildTask(String url, String queueName, Task perTask)
 	{
