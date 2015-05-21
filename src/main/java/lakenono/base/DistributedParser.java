@@ -19,7 +19,11 @@ public abstract class DistributedParser
 		// 取task
 		Task task = Queue.pull(this.getQueueName());
 
-		// TODO task is null
+		// 空值判断
+		if (null == task)
+		{
+			return;
+		}
 
 		String result;
 
@@ -31,6 +35,7 @@ public abstract class DistributedParser
 		catch (IOException | InterruptedException e)
 		{
 			// TODO 下载异常进行重试 推送任务到队列
+			task.updateError();
 			return;
 		}
 
@@ -42,6 +47,7 @@ public abstract class DistributedParser
 		catch (Exception e)
 		{
 			// TODO 解析异常直接进入error
+			task.updateError();
 			return;
 		}
 
