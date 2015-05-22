@@ -64,7 +64,7 @@ public class BaseBean extends BaseLog {
 		@SuppressWarnings("unchecked")
 		long count = (long) GlobalComponents.db.getRunner().query(sql.toString(), DB.scaleHandler, pkFields.toArray());
 		if (count > 0) {
-			this.log.debug("{} has bean exist!", this);
+			this.log.debug("{} has been exist!", this);
 			return true;
 		} else {
 			this.log.debug("{} not exist!", this);
