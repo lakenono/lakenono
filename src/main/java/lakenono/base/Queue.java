@@ -12,7 +12,7 @@ import com.alibaba.fastjson.JSON;
  * @author Lakenono
  */
 @Slf4j
-public class Queue
+public class Queue 
 {
 	/**
 	 * 推送任务

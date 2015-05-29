@@ -2,8 +2,6 @@ package lakenono.base;
 
 import java.io.IOException;
 
-import org.junit.Test;
-
 import lakenono.core.GlobalComponents;
 import lombok.extern.slf4j.Slf4j;
 
