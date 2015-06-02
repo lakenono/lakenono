@@ -106,7 +106,7 @@ public class Task extends BaseBean
 	public void updateStatus(String status)
 	{
 		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE ").append(BaseBean.getTableName(FetchTask.class)).append(' ');
+		sql.append("UPDATE ").append(BaseBean.getTableName(Task.class)).append(' ');
 		sql.append("SET status=? WHERE projectName=? and url=? and queueName=?");
 
 		int records;

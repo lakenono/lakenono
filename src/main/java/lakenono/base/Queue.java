@@ -56,8 +56,8 @@ public class Queue
 	 */
 	public static Task pull(String queueName)
 	{
-		String json = GlobalComponents.jedis.rpop(queueName);
-
+		String json = GlobalComponents.redisAPI.rpop(queueName);
+//		String json = GlobalComponents.jedis.rpop(queueName);
 		if (json == null)
 		{
 			return null;
@@ -76,7 +76,8 @@ public class Queue
 	 */
 	public static void pushMQ(Task task)
 	{
-		GlobalComponents.jedis.lpush(task.getQueueName(), JSON.toJSONString(task));
+//		GlobalComponents.jedis.lpush(task.getQueueName(), JSON.toJSONString(task));
+		GlobalComponents.redisAPI.lpush(task.getQueueName(), JSON.toJSONString(task));
 		log.info("{} push mq !", task);
 	}
 }
