@@ -1,6 +1,7 @@
 package lakenono.base;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import lakenono.core.GlobalComponents;
 import lombok.extern.slf4j.Slf4j;
@@ -79,5 +80,41 @@ public class Queue
 //		GlobalComponents.jedis.lpush(task.getQueueName(), JSON.toJSONString(task));
 		GlobalComponents.redisAPI.lpush(task.getQueueName(), JSON.toJSONString(task));
 		log.info("{} push mq !", task);
+	}
+	/**
+	 * 查看当前redis某个队列有多少个数据
+	 * @param queueName 队列名
+	 * @return 返回数字
+	 */
+	public static long viewQueueNum(String queueName){
+		long count = GlobalComponents.jedis.llen(queueName);
+		log.debug("{} redis queuename={},count={}", queueName, count);
+		return count;
+	}
+	
+	/**
+	 * 清空当前redis某个队列数据
+	 * @param queueName 队列名
+	 */
+	public static long cleanQueue(String queueName){
+		long count = GlobalComponents.jedis.del(queueName);
+		log.debug("{} redis clean queuename={},count={}",queueName,count);
+		return count;
+	}
+	
+	/**
+	 * 重推todo状态的抓取任务
+	 * @param projectName 总任务名
+	 * @param queueName 队列名
+	 * @throws SQLException 
+	 */
+	public static void pushTodoTask(String projectName,String queueName) throws SQLException{
+		List<Task> taks = Task.getTaks(projectName, queueName, Task.TODO);
+		if(taks==null){
+			return;
+		}
+		for(Task task:taks){
+			pushMQ(task);
+		}
 	}
 }
