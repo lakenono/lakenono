@@ -1,48 +1,47 @@
 package lakenono.base;
 
-import java.io.IOException;
-
 import lakenono.core.GlobalComponents;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * 处理带有分页的任务 
+ * 
  * @author Lakenono
  */
 @Slf4j
-public abstract class DistributedPageParser extends BaseParser
-{
+public abstract class DistributedPageParser extends BaseParser {
 	public static final int FIRST_PAGE = 1;
 
 	// 队列名称
 	public abstract String getQueueName();
 
 	@Override
-	public void run()
-	{
+	public void run() {
 		// 取task
 		Task task = Queue.pull(this.getQueueName());
 
 		// 空值判断
-		if (null == task)
-		{
+		if (null == task) {
 			log.debug("{} task is null. sleep...", this.getClass());
 			return;
-		}
-		else
-		{
+		} else {
 			log.debug("task begin {}", task);
 		}
 
 		String result;
 
 		// 爬取
-		try
-		{
-			//TODO 静态 动态 fetch判断.. 使用抽象方法. 是否使用cookie
-			result = GlobalComponents.fetcher.fetch(task.getUrl());
-		}
-		catch (IOException | InterruptedException e)
+		try {
+			// TODO 静态 动态 fetch判断.. 使用抽象方法. 是否使用cookie
+			if (this.fetchType.equals(FETCH_TYPE_DYNAMIC)) {
+				result = GlobalComponents.dynamicFetch.fetch(task.getUrl());
+			} else if (this.fetchType.equals(FETCH_TYPE_JSON)) {
+				result = GlobalComponents.jsonFetch.text(task.getUrl());
+			} else {
+				result = GlobalComponents.fetcher.fetch(task.getUrl());
+			}
+		} catch (Exception e)
+		// catch (IOException | InterruptedException e)
 		{
 			// TODO 下载异常进行重试 推送任务到队列
 			task.updateError();
@@ -50,14 +49,12 @@ public abstract class DistributedPageParser extends BaseParser
 		}
 
 		// 判断错误页面
-		if (this.errorPage(result))
-		{
+		if (this.errorPage(result)) {
 			task.updateErrorPage();
 			return;
 		}
 
-		try
-		{
+		try {
 			// 解析
 			this.parse(result, task);
 
@@ -65,8 +62,7 @@ public abstract class DistributedPageParser extends BaseParser
 			int pagenum = this.getMaxPage(result, task);
 
 			// 迭代
-			for (int i = FIRST_PAGE; i <= pagenum; i++)
-			{
+			for (int i = FIRST_PAGE; i <= pagenum; i++) {
 				// 创建url
 				String url = buildUrl(i);
 
@@ -77,9 +73,7 @@ public abstract class DistributedPageParser extends BaseParser
 				Queue.push(todoTask);
 			}
 
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			log.error("{}", e);
 			task.updateError();
 			return;
@@ -105,11 +99,10 @@ public abstract class DistributedPageParser extends BaseParser
 	 * @param url
 	 * @return
 	 */
-	protected Task buildTask(String url, Task perTask)
-	{
+	protected Task buildTask(String url, Task perTask) {
 		Task task = new Task();
 		task.setProjectName(perTask.getProjectName());
-		task.setQueueName(this.getQueueName());
+		task.setQueueName(perTask.getQueueName());
 		task.setUrl(url);
 		task.setExtra(perTask.getExtra());
 

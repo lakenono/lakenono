@@ -1,7 +1,5 @@
 package lakenono.base;
 
-import java.io.IOException;
-
 import lakenono.core.GlobalComponents;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,9 +38,16 @@ public abstract class DistributedParser extends BaseParser
 		// 爬取
 		try
 		{
-			result = GlobalComponents.fetcher.fetch(task.getUrl());
+			if(this.fetchType.equals(FETCH_TYPE_DYNAMIC)){
+				result = GlobalComponents.dynamicFetch.fetch(task.getUrl());
+			} else if (this.fetchType.equals(FETCH_TYPE_JSON)) {
+				result = GlobalComponents.jsonFetch.text(task.getUrl());
+			}else{
+				result = GlobalComponents.fetcher.fetch(task.getUrl());
+			}
 		}
-		catch (IOException | InterruptedException e)
+		catch (Exception e)
+//		catch (IOException | InterruptedException e)
 		{
 			// TODO 下载异常进行重试 推送任务到队列
 			log.error("", e);

@@ -15,6 +15,7 @@ public abstract class BaseParser
 
 	public static String FETCH_TYPE_DEFAULT = "default";
 	public static String FETCH_TYPE_DYNAMIC = "dynamic";
+	public static String FETCH_TYPE_JSON = "json";
 
 	public abstract void run();
 
@@ -26,11 +27,15 @@ public abstract class BaseParser
 		return false;
 	}
 
-	protected void useDynamicFetch()
+	public void useDynamicFetch()
 	{
 		this.fetchType = FETCH_TYPE_DYNAMIC;
 	}
-
+	
+	public void userJsonFetch(){
+		this.fetchType = FETCH_TYPE_JSON;
+	}
+	
 	protected void useCookie()
 	{
 		this.cookie = "yes";

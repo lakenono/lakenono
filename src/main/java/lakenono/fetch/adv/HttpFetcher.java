@@ -32,4 +32,12 @@ public interface HttpFetcher extends Closeable {
 		HttpResponse httpResponse = this.run(httpRequest);
 		return httpResponse.getContent();
 	}
+	
+	default public String text(String url) throws Exception{
+		HttpRequest httpRequest = new HttpRequest(url);
+		httpRequest.setNeedCookies(false);
+		httpRequest.setNeedContent(true);
+		HttpResponse httpResponse = this.run(httpRequest);
+		return new String(httpResponse.getContent(),httpResponse.getCharset()==null?"utf-8":httpResponse.getCharset());
+	}
 }
