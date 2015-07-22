@@ -95,7 +95,7 @@ public class Task extends BaseBean
 
 	public static void main(String[] args) throws Exception
 	{
-		new FetchTask().buildTable();
+		new Task().buildTable();
 	}
 
 	// TODO 增加重试
