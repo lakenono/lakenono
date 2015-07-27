@@ -2,8 +2,15 @@ package lakenono.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicHeaderValueParser;
+import org.apache.http.message.ParserCursor;
+import org.apache.http.util.CharArrayBuffer;
 
 public class UrlUtils {
 	public static String getDomain(String url) {
@@ -29,5 +36,26 @@ public class UrlUtils {
 			e.printStackTrace();
 		}
 		return value;
+	}
+	
+	/*
+	 * 把url问号后面的参数转换成map
+	 */
+	public static Map<String, String> parse(String params) {
+		if (params == null) {
+			return null;
+		}
+		Map<String, String> maps = new HashMap<String, String>();
+		final BasicHeaderValueParser parser = new BasicHeaderValueParser();
+		final CharArrayBuffer buffer = new CharArrayBuffer(params.length());
+		buffer.append(params);
+		final ParserCursor cursor = new ParserCursor(0, buffer.length());
+		while (!cursor.atEnd()) {
+			final NameValuePair nvp = parser.parseNameValuePair(buffer, cursor, new char[] { '&', ';' });
+			if (nvp.getName().length() > 0) {
+				maps.put(nvp.getName(), nvp.getValue());
+			}
+		}
+		return maps;
 	}
 }
