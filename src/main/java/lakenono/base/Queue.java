@@ -38,6 +38,8 @@ public class Queue
 			if (!task.exist())
 			{
 				task.persist();
+				// 推送
+				pushMQ(task);
 			}
 		}
 		catch (IllegalArgumentException | IllegalAccessException | SQLException | InstantiationException e)
@@ -45,8 +47,6 @@ public class Queue
 			log.error("{}", e);
 		}
 
-		// 推送
-		pushMQ(task);
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class Queue
 	 */
 	public static long viewQueueNum(String queueName){
 		long count = GlobalComponents.jedis.llen(queueName);
-		log.debug("{} redis queuename={},count={}", queueName, count);
+		log.debug("{} redis queuename={},count={}",Queue.class.getName(),queueName, count);
 		return count;
 	}
 	
