@@ -32,11 +32,12 @@ public class BaseBean extends BaseLog {
 	 * 
 	 * @return true：记录在数据库中存在，false 不存在
 	 */
-	public boolean exist() throws IllegalArgumentException, IllegalAccessException, SQLException {
+	public boolean exist() throws IllegalArgumentException,
+			IllegalAccessException, SQLException {
 		StringBuilder sql = new StringBuilder();
 
 		String tablename = this.getClass().getAnnotation(DBTable.class).name();
-		sql.append("SELECT COUNT(*) FROM ").append(tablename);
+		sql.append("SELECT COUNT(1) FROM ").append(tablename);
 		sql.append(" WHERE ");
 
 		Field[] fields = this.getClass().getDeclaredFields(); // 所有字段
@@ -48,7 +49,8 @@ public class BaseBean extends BaseLog {
 
 			// 添加PK 字段
 			if (field.getAnnotation(DBConstraintPK.class) != null) {
-				sql.append(field.getName()).append('=').append('?').append(" and ");
+				sql.append(field.getName()).append('=').append('?')
+						.append(" and ");
 				pkFields.add(field.get(this));
 			}
 		}
@@ -62,7 +64,8 @@ public class BaseBean extends BaseLog {
 		sql.delete(sql.length() - " and ".length(), sql.length());
 
 		@SuppressWarnings("unchecked")
-		long count = (long) GlobalComponents.db.getRunner().query(sql.toString(), DB.scaleHandler, pkFields.toArray());
+		long count = (long) GlobalComponents.db.getRunner().query(
+				sql.toString(), DB.scaleHandler, pkFields.toArray());
 		if (count > 0) {
 			this.log.debug("{} has been exist!", this);
 			return true;
@@ -77,7 +80,8 @@ public class BaseBean extends BaseLog {
 	 * 
 	 * @return true：插入记录，false：未插入记录
 	 */
-	public boolean persistOnNotExist() throws IllegalArgumentException, IllegalAccessException, SQLException, InstantiationException {
+	public boolean persistOnNotExist() throws IllegalArgumentException,
+			IllegalAccessException, SQLException, InstantiationException {
 		if (exist()) {
 			return false;
 		}
@@ -93,7 +97,8 @@ public class BaseBean extends BaseLog {
 	 * @throws SQLException
 	 * @throws InstantiationException
 	 */
-	public void persist() throws IllegalArgumentException, IllegalAccessException, SQLException, InstantiationException {
+	public void persist() throws IllegalArgumentException,
+			IllegalAccessException, SQLException, InstantiationException {
 		StringBuilder sql = new StringBuilder();
 
 		String tablename = this.getClass().getAnnotation(DBTable.class).name();
@@ -106,7 +111,8 @@ public class BaseBean extends BaseLog {
 			field.setAccessible(true);
 
 			// 排除掉非序列化字段
-			if (field.getAnnotation(DBField.class) != null && !field.getAnnotation(DBField.class).serialization()) {
+			if (field.getAnnotation(DBField.class) != null
+					&& !field.getAnnotation(DBField.class).serialization()) {
 				continue;
 			}
 
@@ -136,7 +142,8 @@ public class BaseBean extends BaseLog {
 		this.log.debug(sql.toString());
 
 		log.info("{} persist .", this);
-		GlobalComponents.db.getRunner().update(sql.toString(), params.toArray());
+		GlobalComponents.db.getRunner()
+				.update(sql.toString(), params.toArray());
 	}
 
 	/**
@@ -147,7 +154,8 @@ public class BaseBean extends BaseLog {
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 */
-	protected Object serializeFiledValue(Field field) throws IllegalArgumentException, IllegalAccessException {
+	protected Object serializeFiledValue(Field field)
+			throws IllegalArgumentException, IllegalAccessException {
 		if (field.getType() == Map.class) {
 			return JSON.toJSONString(field.get(this));
 		}
@@ -163,13 +171,17 @@ public class BaseBean extends BaseLog {
 	 */
 	public static <T> List<T> getAll(Class<T> c) throws SQLException {
 		String tablename = getTableName(c);
-		return GlobalComponents.db.getRunner().query("SELECT * FROM " + tablename, new BeanListHandler<T>(c, new BasicRowProcessor(new CustomBeanProcesser())));
+		return GlobalComponents.db.getRunner().query(
+				"SELECT * FROM " + tablename,
+				new BeanListHandler<T>(c, new BasicRowProcessor(
+						new CustomBeanProcesser())));
 	}
 
 	static class CustomBeanProcesser extends BeanProcessor {
 
 		@Override
-		protected Object processColumn(ResultSet rs, int index, Class<?> propType) throws SQLException {
+		protected Object processColumn(ResultSet rs, int index,
+				Class<?> propType) throws SQLException {
 			if (propType == Map.class) {
 				return JSON.parseObject(rs.getString(index), Map.class);
 			}
@@ -191,13 +203,15 @@ public class BaseBean extends BaseLog {
 		sql.append("CREATE TABLE `" + tablename + "` (");
 
 		Field[] fields = this.getClass().getDeclaredFields();
+		List<String> pk = new ArrayList<String>();
 
 		for (Field field : fields) {
 			// 设置private访问权限
 			field.setAccessible(true);
 
 			// 排除掉非序列化字段
-			if (field.getAnnotation(DBField.class) != null && !field.getAnnotation(DBField.class).serialization()) {
+			if (field.getAnnotation(DBField.class) != null
+					&& !field.getAnnotation(DBField.class).serialization()) {
 				continue;
 			}
 
@@ -208,19 +222,44 @@ public class BaseBean extends BaseLog {
 				continue;
 			}
 
-			if (field.getAnnotation(DBField.class) != null && !field.getAnnotation(DBField.class).type().equals("varchar")) {
-				sql.append("`" + field.getName() + "` ").append(field.getAnnotation(DBField.class).type() + " NULL");
+			if (field.getAnnotation(DBField.class) != null
+					&& !field.getAnnotation(DBField.class).type()
+							.equals("varchar")) {
+				sql.append("`" + field.getName() + "` ").append(
+						field.getAnnotation(DBField.class).type() + " NULL");
 			} else {
-				sql.append("`" + field.getName() + "` ").append("varchar(200) NULL");
+				sql.append("`" + field.getName() + "` ").append(
+						"varchar(200) NULL");
+			}
+			// 主键字段
+			if (field.getAnnotation(DBConstraintPK.class) != null) {
+				pk.add(field.getName());
 			}
 
 			sql.append(", ");
 		}
 		sql.delete(sql.length() - 2, sql.length());
-		sql.append(");");
-
+		// 添加索引
+		if (pk.size() > 0) {
+			sql.append(" , INDEX ");
+			StringBuilder index_name = new StringBuilder();
+			for (String name : pk) {
+				index_name.append(name).append("_");
+			}
+			index_name.deleteCharAt(index_name.length() - 1);
+			sql.append("`" + index_name + "`").append(" (");
+			for (String field : pk) {
+				// 限定索引长度
+				// sql.append(field).append("(20) ,");
+				sql.append(field).append(" ,");
+			}
+			sql.deleteCharAt(sql.length() - 1);
+			// 更新表时，延迟更新索引
+			sql.append(")) DELAY_KEY_WRITE= 1;");
+		} else {
+			sql.append(");");
+		}
 		log.debug(sql.toString());
-
 		GlobalComponents.db.getRunner().update(sql.toString());
 	}
 
