@@ -1,6 +1,9 @@
 package lakenono.base;
 
+import org.apache.commons.lang.StringUtils;
+
 import lakenono.core.GlobalComponents;
+import lakenono.fetcher.Fetcher;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -32,14 +35,20 @@ public abstract class DistributedPageParser extends BaseParser {
 
 		// 爬取
 		try {
-			// TODO 静态 动态 fetch判断.. 使用抽象方法. 是否使用cookie
-			if (this.fetchType.equals(FETCH_TYPE_DYNAMIC)) {
-				result = GlobalComponents.dynamicFetch.fetch(task.getUrl());
-			} else if (this.fetchType.equals(FETCH_TYPE_JSON)) {
-				result = GlobalComponents.jsonFetch.text(task.getUrl());
-			} else {
-				result = GlobalComponents.fetcher.fetch(task.getUrl());
+			Fetcher fetcher = selectFetcher();
+
+			// 获得cookie
+			String cookies = null;
+			String cookieDomain = getCookieDomain();
+
+			if (StringUtils.isNotBlank(cookieDomain)) {
+				// 做获取cookie的逻辑
+				cookies = GlobalComponents.authService.getCookies(cookieDomain);
+				log.debug("get cookie : {} = {}", cookieDomain, cookies);
 			}
+
+			// 下载内容
+			result = fetcher.fetch(task.getUrl(), cookies);
 		} catch (Exception e)
 		// catch (IOException | InterruptedException e)
 		{
@@ -107,5 +116,31 @@ public abstract class DistributedPageParser extends BaseParser {
 		task.setExtra(perTask.getExtra());
 
 		return task;
+	}
+	
+	/**
+	 * 选择Fetcher
+	 * 
+	 * @return
+	 */
+	protected Fetcher selectFetcher() {
+		Fetcher fetcher = null;
+
+		if (this.fetchType.equals(FETCH_TYPE_DYNAMIC)) {
+			fetcher = GlobalComponents.seleniumFetcher;
+		} else {
+			fetcher = GlobalComponents.jsoupFetcher;
+		}
+
+		return fetcher;
+	}
+
+	/**
+	 * 获取cookie 域名
+	 * 
+	 * @return
+	 */
+	protected String getCookieDomain() {
+		return "";
 	}
 }
