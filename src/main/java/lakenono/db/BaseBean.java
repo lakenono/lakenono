@@ -250,8 +250,13 @@ public class BaseBean extends BaseLog {
 			sql.append("`" + index_name + "`").append(" (");
 			for (String field : pk) {
 				// 限定索引长度
-				// sql.append(field).append("(20) ,");
-				sql.append(field).append(" ,");
+//				sql.append(field).append("(200) ,");
+//				如果是url字段，索引长度设置200，其他字段索引长度10
+				if(field.equals("url")){
+					sql.append(field).append("(200) ,");
+				}else{
+					sql.append(field).append("(10) ,");
+				}
 			}
 			sql.deleteCharAt(sql.length() - 1);
 			// 更新表时，延迟更新索引
