@@ -253,9 +253,9 @@ public class BaseBean extends BaseLog {
 //				sql.append(field).append("(200) ,");
 //				如果是url字段，索引长度设置200，其他字段索引长度10
 				if(field.equals("url")){
-					sql.append(field).append("(200) ,");
+					sql.append('`').append(field).append('`').append("(200) ,");
 				}else{
-					sql.append(field).append("(10) ,");
+					sql.append('`').append(field).append('`').append("(10) ,");
 				}
 			}
 			sql.deleteCharAt(sql.length() - 1);
