@@ -210,12 +210,12 @@ public class DBBean {
 	/**
 	 * 插入，主键重复时忽略
 	 * 
-	 * @return
+	 * @return true 插入完成；false 记录已存在
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 * @throws SQLException
 	 */
-	public int saveOnNotExist() throws IllegalArgumentException, IllegalAccessException, SQLException {
+	public boolean saveOnNotExist() throws IllegalArgumentException, IllegalAccessException, SQLException {
 		StringBuilder sql = new StringBuilder();
 
 		String tableName = getTableName();
@@ -262,11 +262,11 @@ public class DBBean {
 
 		if (result > 0) {
 			log.debug("{} insert finish ! ", this);
+			return true;
 		} else {
 			log.debug("{} has bean exist ! ", this);
+			return false;
 		}
-
-		return result;
 	}
 
 	private String getTableName() {
