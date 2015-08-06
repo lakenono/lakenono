@@ -35,14 +35,13 @@ public class Queue
 		// 如果task不存在 持久化
 		try
 		{
-			if (!task.exist())
+			if (task.saveOnNotExist())
 			{
-				task.persist();
 				// 推送
 				pushMQ(task);
 			}
 		}
-		catch (IllegalArgumentException | IllegalAccessException | SQLException | InstantiationException e)
+		catch (IllegalArgumentException | IllegalAccessException | SQLException e)
 		{
 			log.error("{}", e);
 		}

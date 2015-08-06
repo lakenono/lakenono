@@ -6,6 +6,7 @@ import java.util.List;
 import lakenono.core.GlobalComponents;
 import lakenono.db.BaseBean;
 import lakenono.db.DB;
+import lakenono.db.DBBean;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBTable;
 import lakenono.task.FetchTask;
@@ -25,7 +26,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = false)
 @Slf4j
-public class Task extends BaseBean
+public class Task extends DBBean
 {
 	public static final String TODO = "todo";
 	public static final String SUCCESS = "success";
@@ -80,7 +81,7 @@ public class Task extends BaseBean
 	public boolean hasCompleted() throws SQLException
 	{
 		@SuppressWarnings("unchecked")
-		long count = (long) GlobalComponents.db.getRunner().query("select count(*) from " + BaseBean.getTableName(FetchTask.class) + " where projectName=? and url=? and queueName=? and status!=? ", DB.scaleHandler, this.projectName, this.url, this.queueName, TODO);
+		long count = (long) GlobalComponents.db.getRunner().query("select count(*) from " + DBBean.getTableName(FetchTask.class) + " where projectName=? and url=? and queueName=? and status!=? ", DB.scaleHandler, this.projectName, this.url, this.queueName, TODO);
 		if (count > 0)
 		{
 			log.debug("{} is completed..", this);
@@ -95,7 +96,7 @@ public class Task extends BaseBean
 
 	public static void main(String[] args) throws Exception
 	{
-		new Task().buildTable();
+		DBBean.createTable(Task.class);
 	}
 
 	// TODO 增加重试
@@ -132,7 +133,7 @@ public class Task extends BaseBean
 	 */
 	public static int deleteLog(String projectName,String queueName) throws SQLException{
 		log.debug("delete task projectName={},queueName={}", projectName, queueName);
-		int delCount = GlobalComponents.db.getRunner().update("DELETE FROM " + BaseBean.getTableName(Task.class) + " WHERE projectName=? and queueName=?", projectName, queueName);
+		int delCount = GlobalComponents.db.getRunner().update("DELETE FROM " + DBBean.getTableName(Task.class) + " WHERE projectName=? and queueName=?", projectName, queueName);
 		log.debug("delete task queueName={},queueName={} finish ，delete count ：{} ", queueName, queueName, delCount);
 		return delCount;
 	}
@@ -146,7 +147,7 @@ public class Task extends BaseBean
 	 * @throws SQLException 
 	 */
 	public static List<Task> getTaks(String projectName,String queueName,String status) throws SQLException{
-		return GlobalComponents.db.getRunner().query("select * from " + BaseBean.getTableName(Task.class) + " where projectName=? and queueName=? and status=? ", new BeanListHandler<>(Task.class), projectName, queueName, status);
+		return GlobalComponents.db.getRunner().query("select * from " + DBBean.getTableName(Task.class) + " where projectName=? and queueName=? and status=? ", new BeanListHandler<>(Task.class), projectName, queueName, status);
 	}
 
 }
