@@ -11,37 +11,65 @@ import org.apache.thrift.transport.TTransport;
 
 @Slf4j
 public class AuthServiceClient implements AuthService.Iface {
-	private TTransport transport;
-	private AuthService.Iface client;
+	private String serverIp;
+	private int port;
 
 	public AuthServiceClient(String serverIp, int port) {
+		this.serverIp = serverIp;
+		this.port = port;
+	}
+
+	@Override
+	public String getCookies(String domain) throws TException {
+		String cookies = "";
 		// 设置传输通道 - 普通IO流通道
 		try {
-			transport = new TSocket(serverIp, port);
+			TTransport transport = new TSocket(serverIp, port);
 			transport.open();
 
 			// 使用高密度二进制协议
 			TProtocol protocol = new TBinaryProtocol(transport);
 
 			// 创建Client
-			client = new AuthService.Client(protocol);
+			AuthService.Iface client = new AuthService.Client(protocol);
+			cookies = client.getCookies(domain);
+
+			transport.close();
 		} catch (Exception e) {
 			log.error("AuthServiceClient init error : {}", e.getMessage(), e);
 		}
-	}
-
-	@Override
-	public String getCookies(String domain) throws TException {
-		return client.getCookies(domain);
+		return cookies;
 	}
 
 	public void close() {
-		transport.close();
 	}
-	
+
 	public static void main(String[] args) throws TException {
-			String cookies = GlobalComponents.authService.getCookies("weibo.cn");
-			System.out.println(cookies);
+		Thread[] threads = new Thread[30];
+
+		for (int i = 0; i < threads.length; i++) {
+			threads[i] = new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					for (int i = 0; i < 100000; i++) {
+						try {
+							String cookies = GlobalComponents.authService.getCookies("weibo.cn");
+							System.out.println(cookies);
+						} catch (TException e) {
+							e.printStackTrace();
+						}
+					}
+
+				}
+
+			});
+		}
+
+		for (int i = 0; i < threads.length; i++) {
+			threads[i].start();
+		}
+
 	}
 
 }
