@@ -8,7 +8,7 @@ public interface Fetcher {
 	 * @return
 	 */
 	default public String fetch(String url) throws Exception {
-		return fetch(url, "");
+		return fetch(url, "", "");
 	}
 
 	/**
@@ -18,5 +18,5 @@ public interface Fetcher {
 	 * @param cookie
 	 * @return
 	 */
-	public String fetch(String url, String cookies) throws Exception;
+	public String fetch(String url, String cookies, String charset) throws Exception;
 }

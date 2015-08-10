@@ -12,7 +12,7 @@ import org.jsoup.Jsoup;
 public class JSoupFetcher implements Fetcher {
 
 	@Override
-	public String fetch(String url, String cookies) throws InterruptedException {
+	public String fetch(String url, String cookies,String charset) throws InterruptedException {
 		Connection connect = Jsoup.connect(url);
 
 		// cookie
@@ -29,7 +29,11 @@ public class JSoupFetcher implements Fetcher {
 
 		for (int i = 1; i <= retry; i++) {
 			try {
-				return connect.execute().body();
+				if(StringUtils.isBlank(charset)){
+					return connect.execute().body();
+				}else{
+					return new String(connect.execute().bodyAsBytes(),charset);
+				}
 			} catch (IOException e) {
 				log.error("JSoupFetcher fetch error : {}, 1 秒后重试第[{}]次..", e.getMessage(), i);
 				Thread.sleep(1000);
@@ -39,8 +43,8 @@ public class JSoupFetcher implements Fetcher {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String url = "http://weibo.cn/3350447844/info";
-		String cookies = "_T_WM=b55909f1c458a59420d07b4b0994d4ba; SUB=_2A254tZV6DeTxGeVN7lIV9CnEzziIHXVYWTsyrDV6PUJbrdANLXD_kW1QxrUPTyX06x_N8Gbxbo_cBNeepQ..; gsid_CTandWM=4ujA0ade1kbLIkS9Wayabe3BtdC";
-		System.out.println(new JSoupFetcher().fetch(url, cookies));
+		String url = "http://newcar.xcar.com.cn/2474/review/0/0_22.htm";
+//		String cookies = "_T_WM=b55909f1c458a59420d07b4b0994d4ba; SUB=_2A254tZV6DeTxGeVN7lIV9CnEzziIHXVYWTsyrDV6PUJbrdANLXD_kW1QxrUPTyX06x_N8Gbxbo_cBNeepQ..; gsid_CTandWM=4ujA0ade1kbLIkS9Wayabe3BtdC";
+		System.out.println(new JSoupFetcher().fetch(url, "","GBK"));
 	}
 }

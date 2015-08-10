@@ -27,7 +27,7 @@ public class SeleniumFetcher implements Fetcher {
 	private boolean isInit = false;
 
 	@Override
-	public String fetch(String url, String cookies) throws Exception {
+	public String fetch(String url, String cookies,String charset) throws Exception {
 		log.info("DynamicFetch fetch url:{}", url);
 
 		for (int i = 1; i <= retry; i++) {
@@ -92,7 +92,7 @@ public class SeleniumFetcher implements Fetcher {
 	public static void main(String[] args) throws Exception {
 		String url = "http://weibo.cn/3350447844/info";
 		String cookies = "T_WM=b55909f1c458a59420d07b4b0994d4ba; SUB=_2A254tZV6DeTxGeVN7lIV9CnEzziIHXVYWTsyrDV6PUJbrdANLXD_kW1QxrUPTyX06x_N8Gbxbo_cBNeepQ..; gsid_CTandWM=4ujA0ade1kbLIkS9Wayabe3BtdC";
-		System.out.println(new SeleniumFetcher().fetch(url, cookies));
+		System.out.println(new SeleniumFetcher().fetch(url, cookies,""));
 	}
 
 }

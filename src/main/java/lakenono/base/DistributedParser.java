@@ -48,8 +48,10 @@ public abstract class DistributedParser extends BaseParser {
 				log.debug("get cookie : {} = {}", cookieDomain, cookies);
 			}
 
+			String charset = getCharset();
+
 			// 下载内容
-			result = fetcher.fetch(task.getUrl(), cookies);
+			result = fetcher.fetch(task.getUrl(), cookies, charset);
 
 			// 解析
 			this.parse(result, task);
@@ -62,6 +64,15 @@ public abstract class DistributedParser extends BaseParser {
 
 		// 更新任务状态
 		task.updateSuccess();
+	}
+
+	/**
+	 * 设置字符集
+	 * 
+	 * @return
+	 */
+	protected String getCharset() {
+		return "";
 	}
 
 	protected Task buildTask(String url, String queueName, Task perTask) {

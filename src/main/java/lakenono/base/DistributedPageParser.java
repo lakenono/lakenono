@@ -1,13 +1,13 @@
 package lakenono.base;
 
-import org.apache.commons.lang.StringUtils;
-
 import lakenono.core.GlobalComponents;
 import lakenono.fetcher.Fetcher;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
- * 处理带有分页的任务 
+ * 处理带有分页的任务
  * 
  * @author Lakenono
  */
@@ -48,7 +48,8 @@ public abstract class DistributedPageParser extends BaseParser {
 			}
 
 			// 下载内容
-			result = fetcher.fetch(task.getUrl(), cookies);
+			String charset = getCharset();
+			result = fetcher.fetch(task.getUrl(), cookies,charset);
 		} catch (Exception e)
 		// catch (IOException | InterruptedException e)
 		{
@@ -117,7 +118,7 @@ public abstract class DistributedPageParser extends BaseParser {
 
 		return task;
 	}
-	
+
 	/**
 	 * 选择Fetcher
 	 * 
@@ -141,6 +142,15 @@ public abstract class DistributedPageParser extends BaseParser {
 	 * @return
 	 */
 	protected String getCookieDomain() {
+		return "";
+	}
+
+	/**
+	 * 设置字符集
+	 * 
+	 * @return
+	 */
+	protected String getCharset() {
 		return "";
 	}
 }
