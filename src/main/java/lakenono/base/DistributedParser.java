@@ -51,7 +51,7 @@ public abstract class DistributedParser extends BaseParser {
 			String charset = getCharset();
 
 			// 下载内容
-			result = fetcher.fetch(task.getUrl(), cookies, charset);
+			result = fetch(fetcher, cookies, charset, task);
 
 			// 解析
 			this.parse(result, task);
@@ -64,6 +64,20 @@ public abstract class DistributedParser extends BaseParser {
 
 		// 更新任务状态
 		task.updateSuccess();
+	}
+
+	/**
+	 * 抓取
+	 * 
+	 * @param fetcher
+	 * @param cookies
+	 * @param charset
+	 * @param task
+	 * @return
+	 * @throws Exception
+	 */
+	protected String fetch(Fetcher fetcher, String cookies, String charset, Task task) throws Exception {
+		return fetcher.fetch(task.getUrl(), cookies, charset);
 	}
 
 	/**

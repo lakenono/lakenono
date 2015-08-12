@@ -30,9 +30,9 @@ public class JSoupFetcher implements Fetcher {
 		for (int i = 1; i <= retry; i++) {
 			try {
 				if(StringUtils.isBlank(charset)){
-					return connect.execute().body();
+					return connect.ignoreContentType(true).execute().body();
 				}else{
-					return new String(connect.execute().bodyAsBytes(),charset);
+					return new String(connect.ignoreContentType(true).execute().bodyAsBytes(),charset);
 				}
 			} catch (IOException e) {
 				log.error("JSoupFetcher fetch error : {}, 1 秒后重试第[{}]次..", e.getMessage(), i);
