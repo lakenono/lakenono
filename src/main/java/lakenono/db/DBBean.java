@@ -12,6 +12,8 @@ import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.dbutils.BasicRowProcessor;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -275,6 +277,18 @@ public class DBBean {
 			tableName = tableName + "_" + tableKey;
 		}
 		return tableName;
+	}
+
+	/**
+	 * 获得所有数据
+	 * 
+	 * @param c
+	 * @return
+	 * @throws SQLException
+	 */
+	public static <T> List<T> getAll(Class<T> c) throws SQLException {
+		String tablename = getTableName(c);
+		return GlobalComponents.db.getRunner().query("SELECT * FROM " + tablename, new BeanListHandler<T>(c, new BasicRowProcessor()));
 	}
 
 }
