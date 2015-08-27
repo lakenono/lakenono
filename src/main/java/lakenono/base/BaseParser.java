@@ -8,7 +8,7 @@ package lakenono.base;
  * 
  * @author Lakenono
  */
-public abstract class BaseParser
+public abstract class BaseParser implements Runnable
 {
 	public String fetchType = "default";
 	public String cookie = "no";

@@ -1,10 +1,12 @@
 package lakenono.base;
 
-import org.apache.commons.lang.StringUtils;
-
 import lakenono.core.GlobalComponents;
 import lakenono.fetcher.Fetcher;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 普通任务
@@ -13,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public abstract class DistributedParser extends BaseParser {
+	
+	private static final Logger taskLogger = LoggerFactory.getLogger("task_log");
+	
 	// 队列名称
 	public abstract String getQueueName();
 
@@ -21,6 +26,8 @@ public abstract class DistributedParser extends BaseParser {
 
 	@Override
 	public void run() {
+		String classname = this.getClass().getSimpleName();
+		
 		// 取task
 		Task task = Queue.pull(this.getQueueName());
 
@@ -59,11 +66,14 @@ public abstract class DistributedParser extends BaseParser {
 		} catch (Exception e) {
 			log.error("task handle error {} , error : {}  ", task, e.getMessage(), e);
 			task.updateError();
+			taskLogger.info("{},{},{},{},{},{}",classname,task.getProjectName(),task.getQueueName(),task.getUrl(),"error",e.getMessage());
 			return;
 		}
 
 		// 更新任务状态
 		task.updateSuccess();
+		
+		taskLogger.info("{},{},{},{},{},{}",classname,task.getProjectName(),task.getQueueName(),task.getUrl(),"success","");
 	}
 
 	/**

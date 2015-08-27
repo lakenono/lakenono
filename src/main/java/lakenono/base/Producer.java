@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author lakenono
  */
 @Slf4j
-public abstract class Producer
+public abstract class Producer implements Runnable
 {
 	public static final int FIRST_PAGE = 1;
 
@@ -28,25 +28,37 @@ public abstract class Producer
 		this.projectName = projectName;
 	}
 
-	public void run() throws Exception
+	@Override
+	public void run() 
 	{
-		log.info("{} Producer start ...", this.classname);
+		try {
+			log.info("{} Producer start ...", this.classname);
 
-		int pagenum = this.parse();
+			//1 解析获得最大页
+			int pagenum = this.parse();
 
-		log.info("{} Get max page : {}", this.classname, pagenum);
+			log.info("{} Get max page : {}", this.classname, pagenum);
 
-		// 迭代
-		for (int i = FIRST_PAGE; i <= pagenum; i++)
-		{
-			// 创建url
-			String url = buildUrl(i);
+			// 2 迭代创建任务
+			for (int i = FIRST_PAGE; i <= pagenum; i++)
+			{
+				try {
+					// 2.1 创建url
+					String url = buildUrl(i);
 
-			// 创建抓取任务
-			Task task = buildTask(url);
+					// 创建抓取任务
+					Task task = buildTask(url);
 
-			// 推送任务
-			Queue.push(task);
+					// 推送任务
+					Queue.push(task);
+					
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (Exception e) {
+			log.error("get maxpage error : {}",e.getMessage(),e);
 		}
 	}
 
