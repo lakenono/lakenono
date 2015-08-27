@@ -31,7 +31,12 @@ public class Queue
 		{
 			return;
 		}
-
+		
+		// 过滤不爬取url
+		if (GlobalComponents.urlFilter.filterToBoolean(task.getUrl())) {
+			log.info("filter url {}", task.getUrl());
+			return;
+		}
 		// 如果task不存在 持久化
 		try
 		{
