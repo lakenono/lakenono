@@ -26,7 +26,7 @@ public abstract class DistributedParser extends BaseParser {
 
 	@Override
 	public void run() {
-		String classname = this.getClass().getSimpleName();
+		String classname = this.getClass().getName();
 		
 		// 取task
 		Task task = Queue.pull(this.getQueueName());
@@ -66,14 +66,14 @@ public abstract class DistributedParser extends BaseParser {
 		} catch (Exception e) {
 			log.error("task handle error {} , error : {}  ", task, e.getMessage(), e);
 			task.updateError();
-			taskLogger.info("{},{},{},{},{},{}",classname,task.getProjectName(),task.getQueueName(),task.getUrl(),"error",e.getMessage());
+			taskLogger.info("{},{},{},{},{},{}",classname,task.getProjectName(),task.getQueueName(),"error",e.getMessage(),task.getUrl());
 			return;
 		}
 
 		// 更新任务状态
 		task.updateSuccess();
 		
-		taskLogger.info("{},{},{},{},{},{}",classname,task.getProjectName(),task.getQueueName(),task.getUrl(),"success","");
+		taskLogger.info("{},{},{},{},{},{}",classname,task.getProjectName(),task.getQueueName(),"success","",task.getUrl());
 	}
 
 	/**
