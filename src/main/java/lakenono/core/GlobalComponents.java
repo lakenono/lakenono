@@ -11,6 +11,7 @@ import lakenono.fetcher.JSoupFetcher;
 import lakenono.fetcher.SeleniumFetcher;
 import lakenono.task.TaskService;
 import lakenono.util.RedisAPI;
+import lakenono.util.RegexURLFilter;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -41,4 +42,6 @@ public class GlobalComponents {
 	public static SeleniumFetcher seleniumFetcher = new SeleniumFetcher();
 	
 	public static AuthService.Iface authService = new AuthServiceClient("115.28.72.146",8080);
+	
+	public static RegexURLFilter urlFilter = new RegexURLFilter();
 }
