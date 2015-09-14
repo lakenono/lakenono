@@ -22,14 +22,18 @@ public class GlobalComponents {
 
 	public static DB db = new DB();
 
+	@Deprecated
 	public static JsoupFetch fetcher = new JsoupFetch();
 
+	@Deprecated
 	public static HttpFetcher jsonFetch = new HttpClientFetcher();
 
+	@Deprecated
 	public static DynamicFetch dynamicFetch = new DynamicFetch();
 
 	public static TaskService taskService = new TaskService();
 
+	@Deprecated
 	public static Jedis jedis = new Jedis("115.29.110.62", 8080);
 
 	public static RedisAPI redisAPI = new RedisAPI();
