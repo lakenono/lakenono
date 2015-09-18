@@ -10,6 +10,8 @@ import lakenono.core.GlobalComponents;
 import lakenono.db.annotation.DBConstraintPK;
 import lakenono.db.annotation.DBField;
 import lakenono.db.annotation.DBTable;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.dbutils.BasicRowProcessor;
@@ -25,6 +27,8 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class DBBean {
 
+	@Getter
+	@Setter
 	protected String tableKey = "";
 
 	public DBBean() {
