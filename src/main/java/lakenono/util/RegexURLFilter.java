@@ -51,6 +51,9 @@ public class RegexURLFilter {
 	}
 
 	public boolean filterToBoolean(String url) {
+		if(rules == null){
+			return false;
+		}
 		for (RegexRule rule : rules) {
 			if (rule.match(url)) {
 				return true;
