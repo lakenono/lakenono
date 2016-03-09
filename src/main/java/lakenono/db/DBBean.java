@@ -392,6 +392,9 @@ public class DBBean {
 		
 		Field[] fields = dbBean.getDeclaredFields();// 所有字段
 		
+		boolean textBool = false;
+		boolean titleBool = false;
+		
 		for (Field field : fields) {
 			// 设置private访问权限
 			field.setAccessible(true);
@@ -426,7 +429,13 @@ public class DBBean {
 		selectSql.deleteCharAt(selectSql.length() - 1);
 		selectSql.append(" from " + tableName + "");
 		selectSql.append(" where 1 = 1");
-		
+		if(searchMap != null){
+			if(searchMap.get("text") != null && !"".equals(String.valueOf(searchMap.get("text"))) ){
+				selectSql.append(" and case when (select count(*) from information_schema.columns where TABLE_NAME = '" + tableName +"' and column_name = 'title') = 1  then title like '%%' else 1= 1 end");
+				selectSql.append("  case when (select count(*) from information_schema.columns where TABLE_NAME = '" + tableName +"' and column_name = 'text') = 1  then or text like '%%' else 1= 1 end");
+			}	
+		}
+
 		
 		if(pageMap != null){
 			int limit1 = (Integer.valueOf(String.valueOf(pageMap.get("currentPage"))) - 1)*Integer.valueOf(String.valueOf(pageMap.get("pageSize")));
